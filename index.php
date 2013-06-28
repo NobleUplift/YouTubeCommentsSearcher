@@ -9,17 +9,23 @@
 	}
 	
 	if (!isset($argc))
-		die("No arguments given.\nUsage:\nycs.php <videoid> <search>\n");
+		die("No arguments given.\nUsage:\nycs.php <video_id> <search_string> [search_interval]\n");
 	
 	if ($argc > 1)
 		$videoid = $argv[1];
 	else
-		die("Video ID not specified.\nUsage:\nycs.php <videoid> <search>\n");
+		die("Video ID not specified.\nUsage:\nycs.php <video_id> <search_string> [search_interval]\n");
 	
 	if ($argc > 2)
 		$search = $argv[2];
 	else
-		die("Search string not specified.\nUsage:\nycs.php <videoid> <search>\n");
+		die("Search string not specified.\nUsage:\nycs.php <video_id> <search_string> [search_interval]\n");
+	
+	// Interval between searching each page so that YouTube is not overloaded
+	if ($argc > 3)
+		$interval = $argv[3];
+	else
+		$interval = 5;
 	
 	define("MAXPAGES", 200);
 	$opts = array(CURLOPT_RETURNTRANSFER => TRUE, CURLOPT_TIMEOUT => 10);
@@ -50,6 +56,6 @@
 		
 		curl_close($curl);
 		$page++;
-		sleep(1);
+		sleep($interval);
 	}
 ?>
